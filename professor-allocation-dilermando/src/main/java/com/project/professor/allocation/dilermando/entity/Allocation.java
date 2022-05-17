@@ -19,7 +19,6 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "allocation")
 public class Allocation {
-//	Teste 12312
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

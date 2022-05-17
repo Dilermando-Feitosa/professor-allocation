@@ -15,6 +15,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 
 import com.project.professor.allocation.dilermando.entity.Allocation;
+import com.project.professor.allocation.dilermando.entity.Professor;
 import com.project.professor.allocation.dilermando.repository.AllocationRepository;
 
 @DataJpaTest
@@ -34,6 +35,10 @@ public class AllocationRepositoryTest {
         List<Allocation> allocations = allocationRepository.findAll();
 
         // Print
+        for (Allocation allocation2 : allocations) {
+    		System.out.println(allocation2);
+		}
+        
         allocations.forEach(System.out::println);
     }
 
@@ -49,15 +54,17 @@ public class AllocationRepositoryTest {
         System.out.println(allocation);
     }
 
-    @Test
-    public void findByProfessorId() {
+	    @Test
+	    public void findByProfessorId() {
         // Arrange
 
 
         // Act
-        
+        List<Allocation> allocations = allocationRepository.findByProfessorId(1L);;
 
         // Print
+        
+        allocations.forEach(System.out::println);
         
     }
 
@@ -67,9 +74,10 @@ public class AllocationRepositoryTest {
         
 
         // Act
-        
+        List<Allocation> allocations = allocationRepository.findByCourseId(1L);
 
         // Print
+        allocations.forEach(System.out::println);
         
     }
 
@@ -126,7 +134,15 @@ public class AllocationRepositoryTest {
 
     @Test
     public void deleteAll() {
-        // Act
-        
+        // Arrange
+    	List <Allocation> allocations =  allocationRepository.findAll();
+    	allocations.forEach(System.out::println);
+    	
+    	allocationRepository.deleteAll();
+
+    	List <Allocation> allocations2 =  allocationRepository.findAll();
+    	
+       	// Print
+    	allocations2.forEach(System.out::println);        
     }
 }
