@@ -68,14 +68,47 @@ public class AllocationService {
     }
 
     private Allocation saveInternal(Allocation allocation) {
-    	allocation = allocationRepository.save(allocation);
+    	
+        if (!isEndHourGreaterThanStartHour(allocation) || hasCollision(allocation)) {
+            throw new RuntimeException();
+        } else {
+            allocation = allocationRepository.save(allocation);
 
-      	Professor professor = professorService.findById(allocation.getProfessorId());
-      	allocation.setProfessor(professor);
+            Professor professor = professorService.findById(allocation.getProfessorId());
+            allocation.setProfessor(professor);
 
-      	Course course = courseService.findById(allocation.getCourseId());
-      	allocation.setCourse(course);
+            Course course = courseService.findById(allocation.getCourseId());
+            allocation.setCourse(course);
 
-    	return allocation;
+            return allocation;
+        }
+     }
+    
+    boolean isEndHourGreaterThanStartHour(Allocation allocation) {
+        return allocation != null && allocation.getStartHour() != null && allocation.getEndHour() != null
+                && allocation.getEndHour().compareTo(allocation.getStartHour()) > 0;
     }
+
+    boolean hasCollision(Allocation newAllocation) {
+        boolean hasCollision = false;
+
+        List<Allocation> currentAllocations = allocationRepository.findByProfessorId(newAllocation.getProfessorId());
+
+        for (Allocation currentAllocation : currentAllocations) {
+            hasCollision = hasCollision(currentAllocation, newAllocation);
+            if (hasCollision) {
+                break;
+            }
+        }
+
+        return hasCollision;
+    }
+
+    private boolean hasCollision(Allocation currentAllocation, Allocation newAllocation) {
+        return !currentAllocation.getId().equals(newAllocation.getId())
+                && currentAllocation.getDayOfWeek() == newAllocation.getDayOfWeek()
+                && currentAllocation.getStartHour().compareTo(newAllocation.getEndHour()) < 0
+                && newAllocation.getStartHour().compareTo(currentAllocation.getEndHour()) < 0;
+    }
+    
 }
