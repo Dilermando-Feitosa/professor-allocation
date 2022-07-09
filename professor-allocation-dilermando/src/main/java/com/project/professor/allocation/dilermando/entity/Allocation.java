@@ -44,7 +44,7 @@ public class Allocation {
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     @Temporal(TemporalType.TIME)
-    @Column(name = "start", nullable = false)
+    @Column(name = "startHour", nullable = false)
     private Date startHour;
 
     @ApiModelProperty(example = "22:00-0300")
@@ -52,7 +52,7 @@ public class Allocation {
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     @Temporal(TemporalType.TIME)
-    @Column(name = "end", nullable = false)
+    @Column(name = "endHour", nullable = false)
     private Date endHour;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
